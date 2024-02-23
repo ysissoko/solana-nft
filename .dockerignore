@@ -1,0 +1,6 @@
+keys/
+node_modules/
+uploads/
+*.log
+run.sh
+.env
