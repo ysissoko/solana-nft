@@ -4,6 +4,8 @@ module.exports = {
     app: {
         env: String(process.env.NODE_ENV ?? 'development'),
         port: Number(process.env.PORT ?? 3000), 
+        domain: Number(process.env.DOMAIN ?? "backend.ellitestamp.com"), 
+        protocol: Number(process.env.PROTOCOL ?? "http"), 
     },
     logger: {
         name: String(process.env.LOG_SERVICE_NAME ?? 'solana-nft'),
@@ -17,6 +19,28 @@ module.exports = {
             address: String(process.env.STORAGE_URL) ?? "https://devnet.bundlr.network",
             providerUrl: String(process.env.STORAGE_PROVIDER_URL) ?? 'https://api.devnet.solana.com',
             timeout: Number(process.env.STORAGE_CONN_TIMEOUT) ?? Number(60000),
+        },
+        auth: {
+            clientId: String(process.env.WEB3AUTH_CLIENT_ID),
+            web3AuthNetwork: String(process.env.WEB3AUTH_NET_ID),
+            verifier: String(process.env.WEB3AUTH_VERIFIER),
+            jwt: {
+                privateKeyPath: String(process.env.JWT_PRIVATE_KEY_PATH),
+                aud: String(process.env.JWT_AUDIENCE),
+                iss: String(process.env.JWT_ISSUER),
+                jwksEndpoint: String(process.env.WEB3AUTH_JWKS_ENDPOINT),
+            },
+            keyId: String(process.env.JWT_KEYID),
+            provider: {
+                solana: {
+                    chainId: String(process.env.WEB3AUTH_PROVIDER_CHAIN_ID), // Please use 0x1 for Mainnet
+                    rpcTarget: String(process.env.WEB3AUTH_PROVIDER_CHAIN_RPC_TARGET), // Please use some Production RPC Target for Solana Mainnet
+                    displayName: String(process.env.WEB3AUTH_PROVIDER_CHAIN_DISPLAY_NAME), // e.g. "Solana Devnet", "Solana Testnet", "Solana Mainnet"
+                    blockExplorer: "https://explorer.solana.com",
+                    ticker: "SOL",
+                    tickerName: "Solana",
+                },
+            }
         }
     }, 
     uploads: {
