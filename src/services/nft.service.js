@@ -7,7 +7,7 @@ const {
   PublicKey,
 } = require("@solana/web3.js");
 const fs = require('fs');
-
+const logger = require('src/logger');
 async function createNft(user, nft_info) {
     const { name, filename, metadata } = nft_info;
 
@@ -17,7 +17,9 @@ async function createNft(user, nft_info) {
     const { seller_fee_basis_points } = web3;
 
     const wallet = await getWallet(user);
+    logger.debug(`the wallet ${wallet}`)
     const metaplex = await getMetaplex(user);
+
 
     // Create the NFT
     const nft = await metaplex.nfts().create({

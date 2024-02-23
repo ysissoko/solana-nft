@@ -1,3 +1,5 @@
+# Solana NFT backend
+
 ## Prerequisites
 
 ### Run the project locally
@@ -7,8 +9,6 @@ You need to install nodejs & npm to run the project.
 
 2. Run the project
     `npm start`
-
-# Solana NFT backend
 
 ## Serve the jwks file from a web server
 ### What is JWKS ?
@@ -30,3 +30,13 @@ The web3auth verifier need to access to the public key (.jwks) hosted on a publi
 You can use this web [app](https://pem2jwk.vercel.app/) to convert your *.pem* file to a *.jwks* file
 
 4. Host your jwks file to a publicly accessible folder located on a server
+
+## Troubleshoot
+
+### Credit dev account for testing
+
+if you encouter this issue 
+
+> failed to send transaction: Transaction simulation failed: Attempt to debit an account but found no record of a prior credit
+
+You need to credit the Solana wallet by getting the public key and going to the [solana faucet](https://faucet.solana.com/)

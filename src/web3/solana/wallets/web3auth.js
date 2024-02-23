@@ -1,8 +1,6 @@
 const {Keypair} = require('@solana/web3.js')
 const { getProvider } = require("src/web3/solana/auth/web3auth");
 const { SolanaWallet } = require("@web3auth/solana-provider");
-const bs58 = require('bs58')
-
 const logger = require('src/logger')
 
 let wallets = {};
@@ -18,12 +16,16 @@ async function initWallet(user) {
         params: [],
     });
 
-    const privateKey = await provider.request({
+    const privateKeyHex = await provider.request({
         method: "solanaPrivateKey"
     });
+
+    // The key is an hex string encoded in base58
+    const privateKey = Buffer.from(privateKeyHex, "hex");
+
     logger.info(`👛 wallet available for user ${id} on rpc address ${connectionConfig.rpcTarget}`)
-    logger.debug(`privateKey: ${privateKey} length: ${privateKey.length}`)
-    wallets[id] = Keypair.fromSecretKey(bs58.decode(privateKey));
+    wallets[id] = Keypair.fromSecretKey(privateKey);
+    logger.info(`wallet public key: ${wallets[id].publicKey}`);
 
     return wallets[id];
 }
