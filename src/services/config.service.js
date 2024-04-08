@@ -3,9 +3,7 @@ const { join } = require('path');
 module.exports = {
     app: {
         env: String(process.env.NODE_ENV ?? 'development'),
-        port: Number(process.env.PORT ?? 3000), 
-        domain: Number(process.env.DOMAIN ?? "backend.ellitestamp.com"), 
-        protocol: Number(process.env.PROTOCOL ?? "http"), 
+        port: Number(process.env.PORT ?? 3000)
     },
     logger: {
         name: String(process.env.LOG_SERVICE_NAME ?? 'solana-nft'),
