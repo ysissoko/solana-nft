@@ -44,4 +44,12 @@ module.exports = {
     uploads: {
         dir: String(process.env.UPLOADS_DIR ?? './uploads'),
     },
+    mongodb: {
+        url: String(process.env.MONGODB_URL ?? 'mongodb://127.0.0.1:27017/solana-nft')
+    },
+    rateLimiter: {
+        max: Number(process.env.RATE_LIMIT_MAX_PER_WINDOW ?? 100),
+        windowMinutes: Number(process.env.RATE_LIMIT_WINDOW_MINUTES ?? 15),
+        message: String(process.env.RATE_LIMIT_MSG ?? "You have exceeded your 5 requests per minute limit.")
+    },
 }
