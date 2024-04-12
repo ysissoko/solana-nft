@@ -9,15 +9,15 @@ router.post('/login', (req, res) => {
     logger.info(`login ${email}`);
 
     authService.login(email, password)
-    .then(res.status(200).send)
+    .then((user) => res.status(200).send(user))
     .catch(({status, message}) => res.status(status ?? 500).send(message));  
 });
 
 router.post('/register', (req, res) => {
-    logger.info(`registering user ${email}`);
+    logger.info(`registering user ${req.body.email}`);
 
     authService.register(req.body)
-    .then(res.status(200).send)
+    .then((user) => res.status(200).send(user))
     .catch(({message}) => res.status(500).send(message));
 });
 
