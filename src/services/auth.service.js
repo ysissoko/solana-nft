@@ -15,6 +15,12 @@ function generateAccessToken(user) {
     return jwt.sign(user, secret, { expiresIn });
 }
 
+/**
+ * Generates a refresh access token for a user.
+ *
+ * @param {Object} user - The user object.
+ * @returns {string} - The refresh access token.
+ */
 function generateRefreshAccessToken(user) {
     const { secret, expiresIn } = config.auth.jwtRefresh;
     delete user.password;
@@ -55,6 +61,13 @@ function register(user) {
     return newUser.save();
 }
 
+/**
+ * Generates a new access token based on the provided refresh token.
+ * 
+ * @param {Object} req - The request object containing the refresh token.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing the new access token.
+ * @throws {HttpError} - Throws a HttpError if the refresh token is not provided or is invalid.
+ */
 function refreshAccessToken(req) {
     const { jwt: refreshToken } = req.cookies;
     const { secret: refreshSecret } = config.auth.jwtRefresh;
