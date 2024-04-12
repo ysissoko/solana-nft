@@ -1,6 +1,6 @@
 const { getMetaplex } = require("src/web3/metaplex");
 const { join } = require("path");
-const { toMetaplexFile } = require("@metaplex-foundation/js");
+const { toMetaplexFile, token } = require("@metaplex-foundation/js");
 const { uploads, web3 } = require("./config.service");
 const { getWallet } = require("src/web3/solana/wallets/web3auth");
 const { PublicKey } = require("@solana/web3.js");
@@ -54,6 +54,22 @@ async function getAllNfts(user) {
   return nfts;
 }
 
+async function transferNft(user, mintAddress, destinationPubKey) {
+  const metaplex = await getMetaplex(user);
+  const nftOrSft = await getNft(user, mintAddress);
+  
+  logger.debug(destinationPubKey);
+  return await metaplex
+      .nfts()
+      .transfer({
+        nftOrSft,
+        authority: metaplex.identity(),
+        fromOwner: metaplex.identity().publicKey,
+        toOwner: new PublicKey(destinationPubKey),
+        amount: token(1),
+      });
+}
+
 async function createMetadata(user, path, filename, metadata) {
   const { name, attributes, description } = metadata;
 
@@ -69,4 +85,4 @@ async function createMetadata(user, path, filename, metadata) {
   return metadata_uri;
 }
 
-module.exports = { createNft, getNft, getAllNfts };
+module.exports = { createNft, getNft, getAllNfts, transferNft };

@@ -1,5 +1,4 @@
-const { createNft, getNft, getAllNfts } = require('src/services/nft.service');
-const { getRandomUser } = require('src/services/users.service');
+const { createNft, getNft, getAllNfts, transferNft } = require('src/services/nft.service');
 const express = require('express');
 const router = express.Router();
 const logger = require('src/logger');
@@ -31,6 +30,17 @@ router.get("/:mintAddress", tokenVerifier(), async (req, res) => {
       res.status(500).send(e);
     });
   });
+
+router.post("/:mintAddress/transfer", tokenVerifier(), async(req, res) => {
+  const { mintAddress } = req.params;
+  const { destinationPubKey } = req.body;
+  transferNft(req.user, mintAddress, destinationPubKey).then(data => {
+    res.send(data);
+  }).catch((e) => {
+    logger.error(`mint NFT failed ${e}`)
+    res.status(500).send(e);
+  });
+})
 
 router.get("/", tokenVerifier(), async (req, res) => {
   getAllNfts(req.user).then(nfts => {
