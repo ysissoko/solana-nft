@@ -6,7 +6,7 @@ class HttpError extends Error {
     
         // Maintains proper stack trace for where our error was thrown (only available on V8)
         if (Error.captureStackTrace) {
-          Error.captureStackTrace(this, CustomError);
+          Error.captureStackTrace(this, HttpError);
         }
 
         this.name = "HttpError";
@@ -16,3 +16,5 @@ class HttpError extends Error {
         this.date = new Date();
     }
 }
+
+module.exports = HttpError;
