@@ -2,11 +2,12 @@ const { createNft, getNft, getAllNfts } = require('src/services/nft.service');
 const { getRandomUser } = require('src/services/users.service');
 const express = require('express');
 const router = express.Router();
-const logger = require('src/logger')
+const logger = require('src/logger');
+const tokenVerifier = require('src/middlewares/token-verifier');
 
 // Mint a new nft
-router.post('/mint', function(req, res) {
-  createNft(getRandomUser(), req.body).then(nft => {
+router.post('/mint', tokenVerifier, function(req, res) {
+  createNft(req.user, req.body).then(nft => {
     res.send({ nft });
   }).catch((e) => {
     logger.error(`mint NFT failed ${e}`)
@@ -14,7 +15,7 @@ router.post('/mint', function(req, res) {
   });
 });
 
-router.get("/:mintAddress", async (req, res) => {
+router.get("/:mintAddress", tokenVerifier, async (req, res) => {
   const { mintAddress } = req.params;
 
   if (!mintAddress) {
@@ -23,7 +24,7 @@ router.get("/:mintAddress", async (req, res) => {
     });
   }
 
-  getNft(getRandomUser(), mintAddress).then(nft => {
+  getNft(req.user, mintAddress).then(nft => {
       res.send({ nft });
     }).catch((e) => {
       logger.error(`mint NFT failed ${e}`)
@@ -31,12 +32,13 @@ router.get("/:mintAddress", async (req, res) => {
     });
   });
 
-router.get("/", async (_req, res) => {
-  getAllNfts(getRandomUser()).then(nfts => {
+router.get("/", tokenVerifier, async (req, res) => {
+  getAllNfts(req.user).then(nfts => {
     res.send(nfts)
   }).catch(e => {
     logger.error(`get all owned NFTs failed ${e}`);
     res.status(500).send(e);
   });
-})
+});
+
 module.exports = router;

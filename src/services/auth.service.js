@@ -1,5 +1,25 @@
 const User = require('src/models/user.model');
 const HttpError = require('src/exceptions/http.error.js');
+const jwt = require('jsonwebtoken');
+const config = require('src/services/config.service');
+
+/**
+ * Generates an access token for the given user.
+ *
+ * @param {Object} user - The user object.
+ * @returns {string} - The generated access token.
+ */
+function generateAccessToken(user) {
+    const { secret, expiresIn } = config.auth.jwt;
+    delete user.password;
+    return jwt.sign(user, secret, { expiresIn });
+}
+
+function generateRefreshAccessToken(user) {
+    const { secret, expiresIn } = config.auth.jwtRefresh;
+    delete user.password;
+    return jwt.sign(user, secret, { expiresIn });
+}
 
 /**
  * Function to log in a user.
@@ -11,13 +31,14 @@ const HttpError = require('src/exceptions/http.error.js');
  */
 async function login(email, password) {
     const user = await User.findOne({ email }).exec();
+    
     if (!user)
         throw new HttpError(404, "User is not registered");
 
     if (!user.isValidPassword(password))
         throw new HttpError(400, "User password is invalid");
 
-    return user;
+    return { accessToken: generateAccessToken(user._doc), refreshAccessToken: generateRefreshAccessToken(user._doc) };
 }
 
 /**
@@ -34,4 +55,32 @@ function register(user) {
     return newUser.save();
 }
 
-module.exports = { login, register };
+function refreshAccessToken(req) {
+    const { jwt: refreshToken } = req.cookies;
+    const { secret: refreshSecret } = config.auth.jwtRefresh;
+    const { expiresIn, secret } = config.auth.jwt;
+
+    if (!refreshToken) throw new HttpError(401, "Refresh token was not provided");
+
+    return new Promise((resolve, reject) => {
+            // Verifying refresh token
+            jwt.verify(refreshToken, refreshSecret, { noTimestamp: true },
+                (err, decoded) => {
+                    const {iat, exp, ...payload} = decoded;
+                    if (err) {
+                        // Wrong Refesh Token
+                        reject(new HttpError(401, err.message));
+                    }
+                    else {
+                        // Correct token we send a new access token
+
+                        const accessToken = jwt.sign(payload, secret, {
+                            expiresIn
+                        });
+                        resolve({ accessToken });
+                    }
+                })
+            });
+}
+
+module.exports = { login, register, refreshAccessToken };

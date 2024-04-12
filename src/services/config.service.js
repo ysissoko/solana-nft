@@ -50,6 +50,16 @@ module.exports = {
     rateLimiter: {
         max: Number(process.env.RATE_LIMIT_MAX_PER_WINDOW ?? 100),
         windowMinutes: Number(process.env.RATE_LIMIT_WINDOW_MINUTES ?? 15),
-        message: String(process.env.RATE_LIMIT_MSG ?? "You have exceeded your 5 requests per minute limit.")
+        message: String(process.env.RATE_LIMIT_MSG ?? `You have exceeded your ${process.env.RATE_LIMIT_MAX_PER_WINDOW } requests per ${process.env.RATE_LIMIT_WINDOW_MINUTES} minute${process.env.RATE_LIMIT_WINDOW_MINUTES > 1 ? 's' : ''} limit.`)
     },
+    auth: {
+        jwt: {
+            secret: String(process.env.JWT_SECRET),
+            expiresIn: String(process.env.JWT_EXPIRES_IN),
+        },
+        jwtRefresh: {
+            secret: String(process.env.JWT_REFRESH_SECRET),
+            expiresIn: String(process.env.JWT_REFRESH_EXPIRES_IN),
+        }
+    }
 }

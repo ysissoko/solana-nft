@@ -9,7 +9,17 @@ router.post('/login', (req, res) => {
     logger.info(`login ${email}`);
 
     authService.login(email, password)
-    .then((user) => res.status(200).send(user))
+    .then(({ accessToken, refreshAccessToken }) => { 
+        // Creating refresh token not that expiry of refresh 
+        //token is greater than the access token
+        res.cookie('jwt', refreshAccessToken, {
+            httpOnly: true,
+            sameSite: 'None', 
+            secure: true,
+            maxAge: 24 * 60 * 60 * 1000
+        });          
+        res.status(200).send({ accessToken });
+    })
     .catch(({status, message}) => res.status(status ?? 500).send(message));  
 });
 
@@ -20,5 +30,14 @@ router.post('/register', (req, res) => {
     .then((user) => res.status(200).send(user))
     .catch(({message}) => res.status(500).send(message));
 });
+
+router.post('/refresh', (req, res) => {
+    logger.info(`refreshing token`);
+
+    authService.refreshAccessToken(req)
+    .then((token) => res.status(200).send(token))
+    .catch(({message}) => res.status(500).send(message));
+});
+
 
 module.exports = router;
