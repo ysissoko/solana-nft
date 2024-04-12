@@ -1,4 +1,4 @@
-const { Metaplex, keypairIdentity , irysStorage } = require('@metaplex-foundation/js');
+const { Metaplex, keypairIdentity , bundlrStorage } = require('@metaplex-foundation/js');
 const { Connection, clusterApiUrl, Keypair } = require('@solana/web3.js');
 const { getWallet } = require('./solana/wallets/web3auth');
 const { web3 } = require('src/services/config.service');
@@ -15,7 +15,7 @@ async function initMetaplex(user) {
     logger.debug(`bundlr options: ${JSON.stringify(bundlrOpts)}`)
     const metaplex = Metaplex.make(new Connection(clusterApiUrl(web3.clusterUri)))
     .use(keypairIdentity(wallet))
-    .use(irysStorage(bundlrOpts))
+    .use(bundlrStorage(bundlrOpts))
 
     connections[id] = metaplex;
     return metaplex;
