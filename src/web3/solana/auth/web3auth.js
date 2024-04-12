@@ -41,7 +41,7 @@ function getSignedIdToken(user) {
 
   // The private key to sign the jwt token. An asymetric check is made by web3auth to validate the token
   const privateKey = readFileSync(privateKeyPath);
-  const { id: sub, name, email } = user;
+  const { _id: sub, name, email } = user;
   return jwt.sign(
     {
       sub, // must be unique to each user (the sub correspond to the id of the user)
@@ -65,7 +65,7 @@ function getSignedIdToken(user) {
  * @returns {Promise<Object>} - A promise that resolves to the provider object.
  */
 async function getProvider(user) {
-  const { id: verifierId } = user;
+  const { _id: verifierId } = user;
   const loginParams = { verifier, verifierId, idToken: getSignedIdToken(user) };
   logger.debug(`Login params: ${JSON.stringify(loginParams)}`);
   const provider = await web3auth.connect(loginParams);
