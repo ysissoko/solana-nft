@@ -6,7 +6,7 @@ const logger = require('src/logger');
 const tokenVerifier = require('src/middlewares/token-verifier');
 
 // Mint a new nft
-router.post('/mint', tokenVerifier, function(req, res) {
+router.post('/mint', tokenVerifier(), function(req, res) {
   createNft(req.user, req.body).then(nft => {
     res.send({ nft });
   }).catch((e) => {
@@ -15,7 +15,7 @@ router.post('/mint', tokenVerifier, function(req, res) {
   });
 });
 
-router.get("/:mintAddress", tokenVerifier, async (req, res) => {
+router.get("/:mintAddress", tokenVerifier(), async (req, res) => {
   const { mintAddress } = req.params;
 
   if (!mintAddress) {
@@ -32,7 +32,7 @@ router.get("/:mintAddress", tokenVerifier, async (req, res) => {
     });
   });
 
-router.get("/", tokenVerifier, async (req, res) => {
+router.get("/", tokenVerifier(), async (req, res) => {
   getAllNfts(req.user).then(nfts => {
     res.send(nfts)
   }).catch(e => {
