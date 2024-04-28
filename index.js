@@ -27,7 +27,13 @@ app.use(rateLimitMiddleware);
 
 app.use('/nft', require('src/routes/nft.route'));
 app.use('/uploads', require('src/routes/upload.route'));
-app.use('/auth', require('src/routes/auth.route'))
+app.use('/auth', require('src/routes/auth.route'));
+
+app.use('/brand', require('src/routes/crud/brand.route'));
+app.use('/post', require('src/routes/crud/post.route'));
+app.use('/comment', require('src/routes/crud/comment.route'));
+app.use('/onboarding', require('src/routes/crud/on-boarding.route'));
+app.use('/notification', require('src/routes/crud/notification.route'));
 
 app.listen(config.app.port, async () => {
     logger.info(`Process is running on port ${config.app.port}. now starting mongoose connection...`)
