@@ -6,7 +6,7 @@ const BrandSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    avatar: String,
+    logo: String,
     description: String,
     brand_story: String,
     brand_story_image: String

@@ -6,7 +6,11 @@ const BrandStorySchema = new mongoose.Schema({
         ref: "brand"
     },
     image: string,
-    swipe_text: String
+    swipe_text: String,
+    date: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 module.exports = mongoose.model("brand_story", BrandStorySchema);
