@@ -11,6 +11,15 @@ const UserSchema = new mongoose.Schema({
         lowercase: true,
         trim: true,
     },
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    avatar: {
+        type: String,
+        required: false
+    },
     password: {
         type: String,
         required: true
@@ -20,6 +29,10 @@ const UserSchema = new mongoose.Schema({
         enum: roles,
         default: 'user',
         trim: true,
+    },
+    verified: {
+        type: Boolean,
+        default: false
     }
 });
 
