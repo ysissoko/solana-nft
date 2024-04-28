@@ -10,6 +10,10 @@ const BrandStorySchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    publishDate: {
+        type: Date,
+        default: Date.now
     }
 });
 
