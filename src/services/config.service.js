@@ -44,4 +44,7 @@ module.exports = {
     uploads: {
         dir: String(process.env.UPLOADS_DIR ?? './uploads'),
     },
+    firebase: {
+        serviceAccountKey: String(process.env.SERVICE_ACCOUNT_KEY || "ellitestamp-firebase-adminsdk-8d9iz-e604e81ef1.json"),
+    }
 }
