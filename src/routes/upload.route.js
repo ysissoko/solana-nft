@@ -1,5 +1,7 @@
-const upload = require('src/multer/storage');
 const express = require('express');
+const upload = require('src/multer/storage');
+const uploadCtrl = require('src/controllers/upload.controller');
+
 const router = express.Router();
 const verifyToken = require('src/middlewares/token-verifier');
 
