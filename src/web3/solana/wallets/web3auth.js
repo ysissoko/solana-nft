@@ -3,8 +3,6 @@ const { getProvider } = require("src/web3/solana/auth/web3auth");
 const { SolanaWallet } = require("@web3auth/solana-provider");
 const logger = require('src/logger')
 
-let wallets = {};
-
 async function initWallet(user) {
     logger.info("🔌 connecting to the web3 🔌")
     const { id } = user;
@@ -24,15 +22,14 @@ async function initWallet(user) {
     const privateKey = Buffer.from(privateKeyHex, "hex");
 
     logger.info(`👛 wallet available for user ${id} on rpc address ${connectionConfig.rpcTarget}`)
-    wallets[id] = Keypair.fromSecretKey(privateKey);
-    logger.info(`wallet public key: ${wallets[id].publicKey}`);
+    wallet = Keypair.fromSecretKey(privateKey);
+    logger.info(`wallet public key: ${wallet.publicKey}`);
 
-    return wallets[id];
+    return wallet;
 }
 
 async function getWallet(user) {
-    const { id } = user;
-    const wallet = wallets[id] ?? await initWallet(user);
+    const wallet = await initWallet(user);
     return wallet;
 }
 
